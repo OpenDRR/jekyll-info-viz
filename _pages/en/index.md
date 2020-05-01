@@ -16,6 +16,14 @@ title: Test page - Canada.ca
 ---
 # {{ page.contentTitle }}
 
+{% leaflet_map {
+      "center" : [49.28,  -123.12],
+      "zoom" : 12} %}
+
+    {% leaflet_geojson "/assets/data/dsra_sim6p8_cr2022_rlz_1_b0_casualties_agg_view.geojson" %}
+
+{% endleaflet_map %}
+
 This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.

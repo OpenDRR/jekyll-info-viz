@@ -28,6 +28,8 @@ exclude:
 - vendor/ruby/
 
 # 2. Installed Gems
+plugins:
+- jekyll-leaflet
 
 # 3. Gem settings
 
