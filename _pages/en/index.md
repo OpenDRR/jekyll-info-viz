@@ -22,6 +22,13 @@ title: OpenDRR
 {{page.description.en}}
 
 <ul>
+  {% for dataset in site.datasets %}
+    <li>
+      <a href="{{ site.baseurl }}/en/dataset?dataset={{ dataset }}">{{ dataset }}</a>
+    </li>
+  {% endfor %}
+</ul>
+<ul>
   {% for page in site.pages %}
   {% if page.path contains 'en/data' %}
     <li>

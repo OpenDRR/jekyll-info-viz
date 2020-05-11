@@ -19,6 +19,7 @@
   }
 </style>
 <script src="https://unpkg.com/{{ site.leaflet }}/dist/leaflet.js"></script>
+<script src="/assets/js/fetch.umd.js"></script>
 <script>
 
 // L.Icon.Default.imagePath = '{{ "images/carto/" | prepend: site.baseurl }}';
@@ -53,6 +54,8 @@ var basemap = {
     'maxZoom': 9
   })
 };
+
+
 
 var map = L.map('map', {
   {% if page.latlng %}
@@ -94,42 +97,51 @@ var marker = L.marker([{{ page.mlatlng[0] }}, {{ page.mlatlng[1] }}], {
 marker.bindPopup("{{ page.mpop }}").openPopup();
 {% endif %}
 
-{% if page.layer %}
-var layer_obj;
-fetch( "{{ site.baseurl }}{{page.layer}}" ).then(( resp ) => {
-    return resp.json();
-}).then(( data ) => {
-    layer_obj = data;
-    _addGeoJSONObjToMap( layer_obj, map );
-}).catch(( err ) => {
-    console.log( err );
-    _addGeoJSONObjToMap( layer_obj, map );
-});
-{% endif %}
+var urlParams = new URLSearchParams(window.location.search);
 
-function _onEachFeature( feature, layer ) {
-    var potentialPopup = ""
-    if ( feature.properties && feature.properties.popupContent ) {
-        potentialPopup += feature.properties.popupContent;
-    }
-    if ( feature.properties && feature.properties.href ) {
-        potentialPopup += 
-            '<a href="' + feature.properties.href + '">' + 
-                '<img src="' + newWindowImgSrcBase64 + '"></img></a>';}
-    if( potentialPopup ){
-        layer.bindPopup(potentialPopup );
-    }
+if (urlParams.has('dataset')) {
+
+  var layer_obj = urlParams.get('dataset');
+  fetch( "{{ site.baseurl }}{{page.layer}}" ).then(( resp ) => {
+      return resp.json();
+  }).then(( data ) => {
+      layer_obj = data;
+      _addGeoJSONObjToMap( layer_obj, map );
+  }).catch(( err ) => {
+      console.log( err );
+      _addGeoJSONObjToMap( layer_obj, map );
+  });
+
 }
 
-function _addGeoJSONObjToMap( leafletItem, map ){
-  var geojson = L.geoJSON( leafletItem, { 
-      onEachFeature: _onEachFeature,
+
+// function _onEachFeature( feature, layer ) {
+//     var potentialPopup = ""
+//     if ( feature.properties && feature.properties.popupContent ) {
+//         potentialPopup += feature.properties.popupContent;
+//     }
+//     if ( feature.properties && feature.properties.href ) {
+//         potentialPopup += 
+//             '<a href="' + feature.properties.href + '">' + 
+//                 '<img src="' + newWindowImgSrcBase64 + '"></img></a>';}
+//     if( potentialPopup ){
+//         layer.bindPopup(potentialPopup );
+//     }
+// }
+
+function _addGeoJSONObjToMap( layer, map ){
+  
+  var geojson = L.geoJSON( layer, { 
+      // onEachFeature: _onEachFeature,
       style: featureStyle
   } );
+  
   geojson.addTo( map );
+  
   {% if !page.mlatlng %}
   map.fitBounds(geojson.getBounds());
   {% endif %}
+
 }
 
 function getColor(d) {

@@ -287,6 +287,12 @@ title: "gcweb-jekyll" # Site name or title
 wetSiteRoot: "https://wet-boew.github.io/wet-boew"
 leaflet: "leaflet@1.6.0"
 
+# datasets
+datasets:
+  - dsra_sim6p8_cr2022_rlz_1_b0_full_retrofit_agg_view.geojson
+  - dsra_sim6p8_cr2022_rlz_1_b0_full_retrofit_agg_view.geojson
+
+
 
 
   
